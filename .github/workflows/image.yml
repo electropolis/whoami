@@ -63,11 +63,11 @@ jobs:
       #   run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.APP_NAME }}:${{ github.ref_name }}
   
   helm-app-version:
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     name: Create PR with new AppVersion in Helm Repository 
-    runs-on: ubuntu-latest
 
     steps:
 
@@ -95,3 +95,5 @@ jobs:
           git commit -m "Add new appVersion ${{ github.ref_name }}"
           git tag -a ${{ github.ref_name }} HEAD -m "appVersion: ${{ github.ref_name }}"
           git push origin ${{ github.ref_name }} --follow-tags      
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
