@@ -79,10 +79,9 @@ jobs:
         run: echo "app_name=$( echo ${{ env.REPO_NAME }} | cut -d '/' -f2)" >> $GITHUB_OUTPUT
 
       - name: Change current appVersion to ${{ github.ref_name }}
-        uses: mikefarah/yq@v4.40.5
-        with:
-          # The Command which should be run
-          cmd: yq -i '.appVersion = "${{ github.ref_name }}"' helm/${{ steps.vars.outputs.app_name }}/Chart.yaml
+        run: |
+          sed -i 's/^appVersion:.*$/appVersion: "${{ github.ref_name }}"/' ${{ steps.vars.outputs.app_name }}/Chart.yaml
+        working-directory: ${{ github.workspace }}
 
       - name: Commit changes and push with tag
         run: |
