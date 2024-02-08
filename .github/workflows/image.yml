@@ -4,9 +4,12 @@ on:
     tags:
       - v*
 
+env:
+    REPO_NAME: ${{ github.repository }}
+
 jobs:
 
-  build:
+  build-push:
     name: Prepare Docker Image for deployment
     runs-on: ubuntu-latest
     env:
@@ -20,7 +23,7 @@ jobs:
       
       - name: Set APP Name
         id: vars
-        run: echo "docker_tag=$( echo ${{ env.IMAGE_NAME }} | cut -d '/' -f2)" >> $GITHUB_OUTPUT
+        run: echo "docker_name=$( echo ${{ env.REPO_NAME }} | cut -d '/' -f2)" >> $GITHUB_OUTPUT
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -33,7 +36,7 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: |
-            eset/${{ steps.vars.outputs.docker_tag }}
+            eset/${{ steps.vars.outputs.docker_name }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -58,6 +61,37 @@ jobs:
 
       # - name: Push Docker image
       #   run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.APP_NAME }}:${{ github.ref_name }}
+  
+  helm-app-version:
+    name: Create PR with new AppVersion in Helm Repository 
+    runs-on: ubuntu-latest
 
+    steps:
+      
+      - name: Checkout the Helm repo for ${{ env.REPO_NAME }}
+        uses: actions/checkout@v4
+        with:
+          repository: electropolis/helm  # Specify the repository you want to checkout
+          ref: ${{ github.ref_name }}  # Specify the branch you want to switch to
+          # token: ${{ secrets.GITHUB_TOKEN }}  # Required for private repositories
+      
+      - name: Set APP Name
+        id: vars
+        run: echo "app_name=$( echo ${{ env.REPO_NAME }} | cut -d '/' -f2)" >> $GITHUB_OUTPUT
+
+      - name: Change current appVersion to ${{ github.ref_name }}
+        uses: mikefarah/yq@v4.40.5
+        with:
+          # The Command which should be run
+          cmd: yq -i '.appVersion = "${{ github.ref_name }}"' helm/${{ steps.vars.outputs.app_name }}/Chart.yaml
+        
+      - name: Commit changes and push with tag
+        run: |
+          git config --global user.email "${{ steps.vars.outputs.app_name }}@github.com"
+          git config --global user.name "${{ steps.vars.outputs.app_name }}"
+          git add .
+          git commit -m "Add new appVersion ${{ github.ref_name }}"
+          git tag -a ${{ github.ref_name }} HEAD -m "appVersion: ${{ github.ref_name }}"
+          git push origin ${{ github.ref_name }} --follow-tags
 
       
