@@ -93,7 +93,7 @@ jobs:
           git checkout -b ${{ github.ref_name }}
           git add .
           git commit -m "Add new appVersion ${{ github.ref_name }}"
-          git tag -a ${{ github.ref_name }} HEAD -m "appVersion: ${{ github.ref_name }}"
-          git push origin ${{ github.ref_name }} --follow-tags      
+        # git tag -a ${{ github.ref_name }} HEAD -m "appVersion: ${{ github.ref_name }}"
+          git push origin ${{ github.ref_name }}      
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
