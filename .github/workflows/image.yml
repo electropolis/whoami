@@ -65,7 +65,7 @@ jobs:
   helm-app-version:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
     name: Create PR with new AppVersion in Helm Repository 
 
