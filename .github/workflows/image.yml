@@ -67,14 +67,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      
+
       - name: Checkout the Helm repo for ${{ env.REPO_NAME }}
         uses: actions/checkout@v4
         with:
           repository: electropolis/helm  # Specify the repository you want to checkout
-          ref: ${{ github.ref_name }}  # Specify the branch you want to switch to
           # token: ${{ secrets.GITHUB_TOKEN }}  # Required for private repositories
-      
+
       - name: Set APP Name
         id: vars
         run: echo "app_name=$( echo ${{ env.REPO_NAME }} | cut -d '/' -f2)" >> $GITHUB_OUTPUT
@@ -84,14 +83,13 @@ jobs:
         with:
           # The Command which should be run
           cmd: yq -i '.appVersion = "${{ github.ref_name }}"' helm/${{ steps.vars.outputs.app_name }}/Chart.yaml
-        
+
       - name: Commit changes and push with tag
         run: |
           git config --global user.email "${{ steps.vars.outputs.app_name }}@github.com"
           git config --global user.name "${{ steps.vars.outputs.app_name }}"
+          git checkout -b ${{ github.ref_name }}
           git add .
           git commit -m "Add new appVersion ${{ github.ref_name }}"
           git tag -a ${{ github.ref_name }} HEAD -m "appVersion: ${{ github.ref_name }}"
-          git push origin ${{ github.ref_name }} --follow-tags
-
-      
+          git push origin ${{ github.ref_name }} --follow-tags      
