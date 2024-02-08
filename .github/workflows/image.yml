@@ -63,6 +63,9 @@ jobs:
       #   run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.APP_NAME }}:${{ github.ref_name }}
   
   helm-app-version:
+    permissions:
+      contents: read
+      pull-requests: write
     name: Create PR with new AppVersion in Helm Repository 
     runs-on: ubuntu-latest
 
