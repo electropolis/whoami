@@ -81,7 +81,7 @@ jobs:
           git add -A
           git commit -m "Add new appVersion ${{ github.ref_name }}"
           git push origin ${{ github.ref_name }}      
-
+##
 
       # - name: GitHub Push
       # # You may pin to the exact commit or the version.
