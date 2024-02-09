@@ -46,22 +46,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      # - name: Dockerhub login
-      #   uses: docker/login-action@v1
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      # - uses: actions/checkout@v3
-      
-      # - name: Build the Docker image
-      #   run: |
-      #     echo "Tag with: ${{ github.ref_name }}"
-      #     docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{ env.APP_NAME }}:${{ github.ref_name }}
-
-      # - name: Push Docker image
-      #   run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.APP_NAME }}:${{ github.ref_name }}
   
   helm-app-version:
     runs-on: ubuntu-latest
@@ -83,30 +67,30 @@ jobs:
           sed -i 's/^appVersion:.*$/appVersion: "${{ github.ref_name }}"/' ${{ steps.vars.outputs.app_name }}/Chart.yaml
         working-directory: ${{ github.workspace }}
 
-      # - name: Commit changes and push with tag
-      #   run: |
-      #     git config --global user.name "github-actions[bot]"
-      #     git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #     git checkout -b ${{ github.ref_name }}
-      #     git add -A
-      #     git commit -m "Add new appVersion ${{ github.ref_name }}"
-      #     git push origin ${{ github.ref_name }}      
+      - name: Commit changes and push with tag
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b ${{ github.ref_name }}
+          git add -A
+          git commit -m "Add new appVersion ${{ github.ref_name }}"
+          git push origin ${{ github.ref_name }}      
 
 
-      - name: GitHub Push
-      # You may pin to the exact commit or the version.
-      # uses: ad-m/github-push-action@40bf560936a8022e68a3c00e7d2abefaf01305a6
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          # Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Repository name to push. Default or empty value represents current github repository (${GITHUB_REPOSITORY})
-          repository: electropolis/helm # optional, default is 
-          # Destination branch to push changes
-          branch: ${{ github.ref_name }} # optional, default is master
-          # Determines if force push is used
-          #force: # optional
-          # Determines if --tags is used
-          tags: ${{ github.ref_name }} # optional
-          # Directory to change to before pushing.
-          #directory: # optional, default is .
+      # - name: GitHub Push
+      # # You may pin to the exact commit or the version.
+      # # uses: ad-m/github-push-action@40bf560936a8022e68a3c00e7d2abefaf01305a6
+      #   uses: ad-m/github-push-action@v0.6.0
+      #   with:
+      #     # Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     # Repository name to push. Default or empty value represents current github repository (${GITHUB_REPOSITORY})
+      #     repository: electropolis/helm # optional, default is 
+      #     # Destination branch to push changes
+      #     branch: ${{ github.ref_name }} # optional, default is master
+      #     # Determines if force push is used
+      #     #force: # optional
+      #     # Determines if --tags is used
+      #     tags: ${{ github.ref_name }} # optional
+      #     # Directory to change to before pushing.
+      #     #directory: # optional, default is .
