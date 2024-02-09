@@ -77,7 +77,7 @@ jobs:
           git diff
           git remote -v
           git remote remove origin
-          git remote add origin https://${{ secrets.GITHUB_TOKEN }}@github.com/electropolis/${{ github.workspace }}
+          git remote add origin https://${{ secrets.GITHUB_TOKEN }}@github.com/electropolis/helm
           git checkout -b ${{ github.ref_name }}
           git add -A
           git commit -m "Add new appVersion ${{ github.ref_name }}"
