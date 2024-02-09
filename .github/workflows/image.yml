@@ -76,12 +76,12 @@ jobs:
           git diff
           git remote -v
           git remote remove origin
-          git add origin https://${{ secrets.GITHUB_TOKEN }}@github.com/electropolis/${{ steps.vars.outputs.app_name }}
+          git remote add origin https://${{ secrets.GITHUB_TOKEN }}@github.com/electropolis/${{ steps.vars.outputs.app_name }}
           git checkout -b ${{ github.ref_name }}
           git add -A
           git commit -m "Add new appVersion ${{ github.ref_name }}"
           git push origin ${{ github.ref_name }}      
-##
+
 
       # - name: GitHub Push
       # # You may pin to the exact commit or the version.
