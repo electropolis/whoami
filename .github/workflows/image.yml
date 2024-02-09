@@ -71,6 +71,9 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git status
+          git diff
+          git remote -v
           git checkout -b ${{ github.ref_name }}
           git add -A
           git commit -m "Add new appVersion ${{ github.ref_name }}"
