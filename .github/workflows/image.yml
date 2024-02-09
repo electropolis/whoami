@@ -81,7 +81,7 @@ jobs:
           git add -A
           git commit -m "Add new appVersion ${{ github.ref_name }}"
           git tag -a ${{ github.ref_name }} HEAD -m "appVersion: ${{ github.ref_name }}"
-          git push -u origin ${{ github.ref_name }} --follow-tags 
+          git push --set-upstream origin ${{ github.ref_name }} --follow-tags 
 
 
       # - name: GitHub Push
