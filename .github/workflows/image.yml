@@ -67,6 +67,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      repository-projects: write
     name: Create PR with new AppVersion in Helm Repository 
 
     steps:
