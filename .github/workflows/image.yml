@@ -57,6 +57,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: electropolis/helm  # Specify the repository you want to checkout
+          token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Set APP Name
         id: vars
