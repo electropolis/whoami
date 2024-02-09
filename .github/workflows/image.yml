@@ -7,7 +7,6 @@ on:
 permissions: write-all
 env:
     REPO_NAME: ${{ github.repository }}
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
 
