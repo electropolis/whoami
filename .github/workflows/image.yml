@@ -88,7 +88,10 @@ jobs:
 
       - name: Commit changes and push with tag
         run: |
+          git config --global user.email "${{ steps.vars.outputs.app_name }}@github.com"
+          git config --global user.name "${{ steps.vars.outputs.app_name }}"
           git checkout -b ${{ github.ref_name }}
           git add .
           git commit -m "Add new appVersion ${{ github.ref_name }}"
           git push origin ${{ github.ref_name }}      
+
