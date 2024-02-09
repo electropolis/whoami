@@ -80,7 +80,8 @@ jobs:
           git checkout -b ${{ github.ref_name }}
           git add -A
           git commit -m "Add new appVersion ${{ github.ref_name }}"
-          git push origin ${{ github.ref_name }}      
+          git commit -a ${{ github.ref_name }} HEAD -m "appVersion: ${{ github.ref_name }}"
+          git push origin ${{ github.ref_name }} --follow-tags 
 
 
       # - name: GitHub Push
