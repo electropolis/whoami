@@ -87,12 +87,20 @@ For access to new ArgoCD Instance retrive the generated password for `admin` use
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 
+Because of the instance with External IP => vm_external_ip newly crated ArgoCD Service needs to be patched with with `spec.type.LoadBalancer` 
+
+```bash
+kubectl -n argocd patch svc/argocd-server -p '{"spec": {"type": "LoadBalancer"}}'
+```
+
+ArgoCD should be then entered using https://{vm_external_ip}
+
 ##### Setting up ArgoCD
 
-To add `whoami` app in ArgoCD it can be done using GUI or according the IaC approach it should be done using object of kind `Application` that is attached to `electropolis/whoami` repo. File: `argocd-app-config.yaml` That file contains already defined source repo (_electropolis/helm_) with defined parameters that manipulates kubernetes service to type _LoadBalancer_ excluding the setting from `values.yaml` 
+To add `whoami` app in ArgoCD it can be done using GUI or according the IaC approach it should be done using object of kind `Application` that is attached to [`electropolis/helm`](https://github.com/electropolis/helm) repo. File: `argocd-app-config.yaml` That file contains already defined source repo (_electropolis/helm_) with defined parameters that manipulates kubernetes service to type _LoadBalancer_ excluding the setting from `values.yaml` 
 
 ```
-kubectl apply -f argocd-app-config.yaml -n argocd
+kubectl apply -f argocd-app-config.yaml
 ```
 
 ##### Verification
@@ -105,4 +113,7 @@ After applying the Application manifest the deployment should start in ArgoCD
 ❯ kubectl get deployment -n whoami whoami -o wide
 NAME     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES               SELECTOR
 whoami   1/1     1            1           19m   whoami       eset/whoami:v0.1.2   app.kubernetes.io/instance=whoami,app.kubernetes.io/name=whoami
+❯ kubectl -n whoami get svc/whoami -o wide
+NAME     TYPE           CLUSTER-IP   EXTERNAL-IP    PORT(S)          AGE     SELECTOR
+whoami   LoadBalancer   10.0.20.22   34.121.7.164   8080:32683/TCP   3m24s   app.kubernetes.io/instance=whoami,app.kubernetes.io/name=whoami
 ```
