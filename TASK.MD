@@ -22,6 +22,10 @@ Script isn't much sophisticated as the goal of the whole process was to make as 
 Virtual Machine are prepared after provisioning wih Ansible configuration management tool. A specific playbook is prepared that uses `k3s` role. 
 
 
+#### Diagram
+
+![diagram](img/tellent.svg)
+
 ## CI Step in practice
 
 #### 1. Repo [electropolis/whoami](https://github.com/electropolis/whoami)
