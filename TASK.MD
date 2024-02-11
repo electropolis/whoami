@@ -100,3 +100,9 @@ kubectl apply -f argocd-app-config.yaml -n argocd
 After applying the Application manifest the deployment should start in ArgoCD
 
 ![c1](img/c5.png)
+
+```bash
+❯ kubectl get deployment -n whoami whoami -o wide
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES               SELECTOR
+whoami   1/1     1            1           19m   whoami       eset/whoami:v0.1.2   app.kubernetes.io/instance=whoami,app.kubernetes.io/name=whoami
+```
