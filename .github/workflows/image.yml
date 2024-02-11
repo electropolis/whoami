@@ -1,16 +1,16 @@
-name: "Image tag"
+name: "Image"
 on:
   push:
     tags:
       - v*
-      
+
 env:
-    REPO_NAME: ${{ github.repository }}
+  REPO_NAME: ${{ github.repository }}
 
 jobs:
 
   build-push:
-    name: Prepare Docker Image for deployment
+    name: Build Image
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ${{ github.repository }}
@@ -19,8 +19,8 @@ jobs:
 
       - name: Check out the repo
         uses: actions/checkout@v4
-      
-      
+
+
       - name: Set APP Name
         id: vars
         run: echo "docker_name=$( echo ${{ env.REPO_NAME }} | cut -d '/' -f2)" >> $GITHUB_OUTPUT
@@ -45,11 +45,11 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  
+
   helm-app-version:
     needs: build-push
     runs-on: ubuntu-latest
-    name: Create PR with new AppVersion in Helm Repository 
+    name: AppVersion Tag
 
     steps:
 
@@ -79,4 +79,4 @@ jobs:
           git add -A
           git commit -m "Add new appVersion ${{ github.ref_name }}"
           git tag -a ${{ github.ref_name }} HEAD -m "appVersion: ${{ github.ref_name }}"
-          git push --follow-tags 
+          git push --follow-tags
