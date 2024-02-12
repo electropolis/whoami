@@ -17,7 +17,7 @@ Infrastructure is deployed in GCP on *Virtual Machine* with provisioning tool te
  - external static IP
  - A preemptible compute engine virtual machine with defined ssh keys
 
-Script isn't much sophisticated as the goal of the whole process was to make as easy as possible, without defining any static variables, defining for loops and so on. The script in in ...repo_url
+Script isn't much sophisticated as the goal of the whole process was to make as easy as possible, without defining any static variables, defining for loops and so on.
 
 Virtual Machine are prepared after provisioning wih Ansible configuration management tool. A specific playbook is prepared that uses `k3s` role. 
 
