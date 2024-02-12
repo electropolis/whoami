@@ -44,7 +44,7 @@ That triggers few pipelines. One of them is `image.yml` that contains two depend
 
 ![c1](img/c1.png)
 
-First job will build docker image with new tag based on the `git tag` taken from  that was attached to the commit hash. Second will clone the [`electropolis/helm`](https://github.com/electropolis/helm) repo modify the `Chart.yml` file with new tag in the new branch. This job also ads the new tag to the commit and push changes to the repository in new branch. 
+First job will build docker image with new tag based on the `git tag` attached to HEAD commit hash. Second will clone the [`electropolis/helm`](https://github.com/electropolis/helm) repo modify the `Chart.yml` file with new tag in the new branch. This job also ads the new tag to the commit and push changes to the repository in new branch. 
 
 ![c1](img/c2.png)
 
